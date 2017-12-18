@@ -15,7 +15,8 @@ node {
             new File("**/target/surefire-reports/").eachFileMatch(~/.*.xml/){
                 file -> println file.getName()
             }
-        }catch(Exception){
+        }catch(Exception e){
+            println e.getMessage()
             currentBuild.result = 'FAILED'
         }
         
