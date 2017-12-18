@@ -10,7 +10,7 @@ node {
     stage('Unit Test'){
         try{
             junit '**/target/surefire-reports/TEST-*.xml'
-            groovy 'UnitTestMining.groovy' 
+            sh 'groovy UnitTestMining.groovy' 
         }catch(Exception e){
             println e.getMessage()
             currentBuild.result = 'FAILED'
