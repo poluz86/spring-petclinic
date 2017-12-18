@@ -10,7 +10,7 @@ node {
     stage('Unit Test'){
         try{
             junit '**/target/surefire-reports/TEST-*.xml'
-            powershell 'UnitTestMining.ps1' 
+            pwsh 'UnitTestMining.ps1' 
         }catch(Exception e){
             println e.getMessage()
             currentBuild.result = 'FAILED'
