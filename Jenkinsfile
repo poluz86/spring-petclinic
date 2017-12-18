@@ -10,8 +10,7 @@ node {
     stage('Unit Test'){
         try{
             junit '**/target/surefire-reports/TEST-*.xml'
-            //read xml report to validate 
-            //results = new XmlSlurper().parse("RockAndRoll.xml")
+            powershell 'UnitTestMining.ps1' 
         }catch(Exception e){
             println e.getMessage()
             currentBuild.result = 'FAILED'
