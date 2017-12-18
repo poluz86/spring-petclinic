@@ -1,4 +1,7 @@
 node {
+    stage('Checkout') {
+        git 'https://github.com/poluz86/spring-petclinic.git' 
+    }
     stage('Compile') {
         timeout(time:5, unit:'MINUTES'){
             sh 'mvn clean compile'
@@ -8,5 +11,4 @@ node {
         echo "cd /"
         echo "mvn clean test"
     }
-
 }
