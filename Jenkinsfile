@@ -20,6 +20,7 @@ node {
         }
     }
     stage('Fingerprint') {
-        archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+        echo 'archiving'
+        //archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
     }
 }
