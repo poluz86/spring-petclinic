@@ -12,7 +12,9 @@ node {
     stage('Unit Test'){
         try{
             junit '**/target/surefire-reports/TEST-*.xml'
-            println 'MINING'
+            new File("**/target/surefire-reports/").eachFileMatch(~/.*.xml/){
+                file -> println file.getName()
+            }
         }catch(Exception e){
             println e.getMessage()
             currentBuild.result = 'FAILED'
