@@ -11,7 +11,7 @@ node {
         try{
             junit '**/target/surefire-reports/TEST-*.xml'
             //read xml report to validate 
-            results = new XmlSlurper().parse("RockAndRoll.xml")
+            //results = new XmlSlurper().parse("RockAndRoll.xml")
             new File("**/target/surefire-reports/").eachFileMatch(~/.*.xml/){
                 file -> println file.getName()
             }
