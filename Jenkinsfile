@@ -1,3 +1,5 @@
+#!/usr/bin/env groovy
+
 node {
     stage('Checkout') {
         git 'https://github.com/poluz86/spring-petclinic.git' 
@@ -10,7 +12,7 @@ node {
     stage('Unit Test'){
         try{
             junit '**/target/surefire-reports/TEST-*.xml'
-            sh 'groovy UnitTestMining.groovy' 
+            println 'MINING'
         }catch(Exception e){
             println e.getMessage()
             currentBuild.result = 'FAILED'
