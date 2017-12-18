@@ -10,9 +10,10 @@ node {
     }
     stage('Unit Test') {
         try{
-            sh 'mvn test'
-            junit '**/target/surefire-reports/TEST-*.xml'
-            sh 'pwsh UnitTestMining.ps1'
+            sh 'mvn test -ff'
+            sh 'ls target/surefire-reports/'
+            //junit '**/target/surefire-reports/TEST-*.xml'
+            //sh 'pwsh UnitTestMining.ps1'
         }catch(Exception e){
             println e.getMessage()
             currentBuild.result = 'FAILED'
