@@ -12,9 +12,6 @@ node {
             junit '**/target/surefire-reports/TEST-*.xml'
             //read xml report to validate 
             //results = new XmlSlurper().parse("RockAndRoll.xml")
-            new File("**/target/surefire-reports/").eachFileMatch(~/.*.xml/){
-                file -> println file.getName()
-            }
         }catch(Exception e){
             println e.getMessage()
             currentBuild.result = 'FAILED'
