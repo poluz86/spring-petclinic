@@ -4,11 +4,11 @@ node {
         git 'https://github.com/poluz86/spring-petclinic.git' 
     }
     stage('Compile') {
-        timeout(time:20, unit:'MINUTES'){
+        timeout(time:8, unit:'MINUTES'){
             sh 'mvn -X -U clean package'
         }
     }
-    stage('Unit Test'){
+    stage('Unit Test') {
         try{
             junit '**/target/surefire-reports/TEST-*.xml'
             sh 'pwsh UnitTestMining.ps1'
@@ -16,6 +16,8 @@ node {
             println e.getMessage()
             currentBuild.result = 'FAILED'
         }
-        
+    }
+    stage('Fingerprint') {
+        archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
     }
 }
