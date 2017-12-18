@@ -17,6 +17,8 @@ node {
         }catch(Exception e){
             println e.getMessage()
             currentBuild.result = 'FAILED'
+        }finally{
+            sh 'ls target/surefire-reports/'
         }
     }
     stage('Fingerprint') {
