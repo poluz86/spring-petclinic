@@ -5,11 +5,12 @@ node {
     }
     stage('Compile') {
         timeout(time:8, unit:'MINUTES'){
-            sh 'mvn -X -U clean package'
+            sh 'mvn -X -U clean compile'
         }
     }
     stage('Unit Test') {
         try{
+            sh 'mvn test'
             junit '**/target/surefire-reports/TEST-*.xml'
             sh 'pwsh UnitTestMining.ps1'
         }catch(Exception e){
