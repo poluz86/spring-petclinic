@@ -1,4 +1,3 @@
-#!/usr/bin/env groovy
 
 node {
     stage('Checkout') {
@@ -12,9 +11,7 @@ node {
     stage('Unit Test'){
         try{
             junit '**/target/surefire-reports/TEST-*.xml'
-            new File("**/target/surefire-reports/").eachFileMatch(~/.*.xml/){
-                file -> println file.getName()
-            }
+            sh 'pwsh UnitTestMining.ps1'
         }catch(Exception e){
             println e.getMessage()
             currentBuild.result = 'FAILED'
