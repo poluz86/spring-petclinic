@@ -39,11 +39,12 @@ pipeline {
 
     	stage('SonarQube') {
     		steps {
-
-                if(currentBuild.result == 'UNSTABLE'){ 
-                    echo "PIPELINE INESTABLE"
-                    currentBuild.result = 'ABORTED'
-                    return
+                script {
+                    if(currentBuild.result == 'UNSTABLE'){ 
+                        echo "PIPELINE INESTABLE"
+                        currentBuild.result = 'ABORTED'
+                        return
+                    }
                 }
 
     			echo "sonar projectKey"
