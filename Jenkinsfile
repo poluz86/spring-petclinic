@@ -39,6 +39,7 @@ pipeline {
     	stage('SonarQube') {
     		steps {
                 sh 'mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=ada1d856bbb16e3f855e86a76069af9aa360f3ed'
+                echo 'http://localhost:9000/dashboard/index/org.springframework.samples:spring-petclinic'
     		}
     	}
     	stage('Promote') {
@@ -47,6 +48,7 @@ pipeline {
                     if(currentBuild.result == 'SUCCESS'){ 
                         sh 'mvn package'
                     }else{
+                        echo currentBuild.result
                         echo 'THERE WERE ISSUES ON THIS BUILD'
                     }
                 }
