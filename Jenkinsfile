@@ -18,8 +18,9 @@ pipeline {
 	    stage('Compile') {
 			steps {
 	    		timeout(time: 1, unit:'MINUTES'){
-                    echo "$env.PATH"
-		    		echo "$env.GROOVY_HOME"
+                    sh "git rev-parse --short HEAD > .git/commit-id"                        
+                    commit_id = readFile('.git/commit-id')
+                    println commit_id
                     sh 'groovy sample.groovy'
                     echo "mvn clean compile"
    				}
@@ -31,7 +32,7 @@ pipeline {
                     try {
                         sh 'mvn test'
                     }catch(Exception ex) {
-                        echo "Caught: ${ex}"
+                        //echo "Caught: ${ex}"
                         currentBuild.result = 'UNSTABLE'
                     }finally {
                         junit '**/target/surefire-reports/TEST-*.xml'
