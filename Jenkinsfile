@@ -37,12 +37,15 @@ pipeline {
     		}
     	}
 
-        if(currentBuild.result == 'UNSTABLE'){ 
-            echo "PIPELINE INESTABLE"
-        }
-
     	stage('SonarQube') {
     		steps {
+
+                if(currentBuild.result == 'UNSTABLE'){ 
+                    echo "PIPELINE INESTABLE"
+                    currentBuild.result = 'ABORTED'
+                    return
+                }
+
     			echo "sonar projectKey"
     			echo "Cyclomatic Complexity mining"
     			echo "Technical Debt mining"
