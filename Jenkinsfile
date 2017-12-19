@@ -39,12 +39,6 @@ pipeline {
 
     	stage('SonarQube') {
     		steps {
-                script {
-                    if(currentBuild.result == 'UNSTABLE'){ 
-                        exit 2
-                    }
-                }
-
     			echo "sonar projectKey"
     			echo "Cyclomatic Complexity mining"
     			echo "Technical Debt mining"
@@ -52,7 +46,14 @@ pipeline {
     	}
     	stage('Promote') {
     		steps {
-    			sh 'mvn package'
+                script {
+                    if(currentBuild.result == 'SUCCESS'){ 
+                        sh 'mvn package'
+                    }else{
+                        echo 'THERE WERE ISSUES ON THIS BUILD'
+                    }
+                }
+    			
     		}
     	}
    }
