@@ -40,7 +40,7 @@ pipeline {
     		steps {
                 script {
                     if(currentBuild.result == 'UNSTABLE'){ 
-                        return
+                        echo "PIPELINE INESTABLE"
                     }
                 }
     			echo "sonar projectKey"
