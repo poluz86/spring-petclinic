@@ -18,8 +18,9 @@ node {
         }catch(Exception e){
             currentBuild.result = 'UNSTABLE'
         }finally{
-            sh 'ls target/surefire-reports/'
-            junit '**/target/surefire-reports/TEST-*.xml'
+            e.printStackTrace()
+            //sh 'ls target/surefire-reports/'
+            //junit '**/target/surefire-reports/TEST-*.xml'
         }
     }
     stage('Fingerprint') {
