@@ -38,6 +38,11 @@ pipeline {
     	}
     	stage('SonarQube') {
     		steps {
+                script {
+                    if(currentBuild.result == 'UNSTABLE'){ 
+                        return
+                    }
+                }
     			echo "sonar projectKey"
     			echo "Cyclomatic Complexity mining"
     			echo "Technical Debt mining"
