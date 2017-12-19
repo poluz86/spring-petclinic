@@ -11,17 +11,8 @@ node {
         }
     }
     stage('Unit Test') {
-        try{
             println new File('pom.xml').exists()
             sh 'mvn test -ff'
-            //sh 'pwsh UnitTestMining.ps1'
-        }catch(Exception e){
-            currentBuild.result = 'UNSTABLE'
-        }finally{
-            echo e.getMessage()
-            //sh 'ls target/surefire-reports/'
-            //junit '**/target/surefire-reports/TEST-*.xml'
-        }
     }
     stage('Fingerprint') {
         echo 'archiving'
