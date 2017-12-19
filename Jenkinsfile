@@ -17,7 +17,8 @@ pipeline {
 	stages {
 	    stage('Compile') {
 			steps {
-	    		timeout(time: 1, unit:'MINUTES'){                   
+	    		timeout(time: 1, unit:'MINUTES'){
+                    echo "BUILDNUMBER: $BUILD_NUMBER"                   
                     sh 'groovy sample.groovy'
                     echo "mvn clean compile"
    				}
