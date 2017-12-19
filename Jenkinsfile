@@ -41,9 +41,7 @@ pipeline {
     		steps {
                 script {
                     if(currentBuild.result == 'UNSTABLE'){ 
-                        echo "PIPELINE INESTABLE"
-                        currentBuild.result = 'ABORTED'
-                        return
+                        exit 2
                     }
                 }
 
