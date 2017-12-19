@@ -38,9 +38,7 @@ pipeline {
 
     	stage('SonarQube') {
     		steps {
-    			echo "sonar projectKey"
-    			echo "Cyclomatic Complexity mining"
-    			echo "Technical Debt mining"
+                sh 'mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=ada1d856bbb16e3f855e86a76069af9aa360f3ed'
     		}
     	}
     	stage('Promote') {
