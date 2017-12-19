@@ -1,6 +1,10 @@
 pipeline {
 	agent any
 
+    options {
+        buildDiscarder(logRotator(numToKeepStr:'5'))
+    }
+
     environment {
         GROOVY_HOME = '/home/paolo/.sdkman/candidates/groovy/current'
         PATH = "$PATH:/home/paolo/.sdkman/candidates/groovy/current/bin"
@@ -23,7 +27,8 @@ pipeline {
                     try {
                         sh 'mvn test -ff'
                     }catch(Exception ex) {
-
+                        echo "Caught; ${ex}"
+                        exit 1
                     }finally {
                         junit '**/target/surefire-reports/TEST-*.xml'
                     }
