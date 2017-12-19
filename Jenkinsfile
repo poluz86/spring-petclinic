@@ -17,10 +17,7 @@ pipeline {
 	stages {
 	    stage('Compile') {
 			steps {
-	    		timeout(time: 1, unit:'MINUTES'){
-                    sh "git rev-parse --short HEAD > .git/commit-id"                        
-                    commit_id = readFile('.git/commit-id')
-                    println commit_id
+	    		timeout(time: 1, unit:'MINUTES'){                   
                     sh 'groovy sample.groovy'
                     echo "mvn clean compile"
    				}
