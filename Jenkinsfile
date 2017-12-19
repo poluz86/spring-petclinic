@@ -21,6 +21,7 @@ pipeline {
                     echo "BUILDNUMBER: $BUILD_NUMBER"                   
                     sh 'groovy sample.groovy'
                     echo "mvn clean compile"
+                    echo "1"
    				}
 	    	}
 	    }
