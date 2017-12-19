@@ -45,7 +45,7 @@ pipeline {
     	stage('Promote') {
     		steps {
                 script {
-                    if(currentBuild.result == 'SUCCESS'){ 
+                    if(currentBuild.result == null){ 
                         sh 'mvn package'
                     }else{
                         echo currentBuild.result
