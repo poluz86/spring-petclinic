@@ -25,7 +25,7 @@ pipeline {
     		steps {
                 script {
                     try {
-                        sh 'mvn -fae test'
+                        sh 'mvn -fn test'
                     }catch(Exception ex) {
                         //echo "Caught: ${ex}"
                         currentBuild.result = 'UNSTABLE'
