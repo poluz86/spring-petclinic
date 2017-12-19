@@ -41,14 +41,14 @@ public class PetTypeFormatterTests {
         PetType petType = new PetType();
         petType.setName("Hamster");
         String petTypeName = this.petTypeFormatter.print(petType, Locale.ENGLISH);
-        assertEquals("Hamster1", petTypeName);
+        assertEquals("Hamster", petTypeName);
     }
 
     @Test
     public void shouldParse() throws ParseException {
         Mockito.when(this.pets.findPetTypes()).thenReturn(makePetTypes());
         PetType petType = petTypeFormatter.parse("Bird", Locale.ENGLISH);
-        assertEquals("Bird1", petType.getName());
+        assertEquals("Bird", petType.getName());
     }
 
     @Test(expected = ParseException.class)
