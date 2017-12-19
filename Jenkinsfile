@@ -27,8 +27,8 @@ pipeline {
                     try {
                         sh 'mvn test -ff'
                     }catch(Exception ex) {
-                        echo "Caught; ${ex}"
-                        exit 1
+                        echo "Caught: ${ex}"
+                        currentBuild.result = 'UNSTABLE'
                     }finally {
                         junit '**/target/surefire-reports/TEST-*.xml'
                     }
