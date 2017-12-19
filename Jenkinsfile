@@ -25,7 +25,7 @@ pipeline {
     		steps {
                 script {
                     try {
-                        sh 'mvn test -ff'
+                        sh 'mvn test -fae'
                     }catch(Exception ex) {
                         //echo "Caught: ${ex}"
                         currentBuild.result = 'UNSTABLE'
@@ -35,7 +35,6 @@ pipeline {
                 }
     		}
     	}
-
     	stage('SonarQube') {
     		steps {
                 timeout(time:5, unit:'MINUTES') {
@@ -49,6 +48,7 @@ pipeline {
                 script {
                     if(currentBuild.result == null){ 
                         sh 'mvn package'
+                        archiveArtifacts artifacts: 'target/*.jar'
                     }else{
                         echo 'THERE WERE ISSUES ON THIS BUILD'
                     }
