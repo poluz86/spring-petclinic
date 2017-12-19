@@ -1,3 +1,5 @@
+#!/usr/bin/env groovy
+
 
 node {
     stage('Checkout') {
@@ -10,6 +12,7 @@ node {
     }
     stage('Unit Test') {
         try{
+            println new File('pom.xml').exists()
             sh 'mvn test -ff'
             //sh 'pwsh UnitTestMining.ps1'
         }catch(Exception e){
