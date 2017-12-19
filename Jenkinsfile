@@ -48,7 +48,6 @@ pipeline {
                     if(currentBuild.result == null){ 
                         sh 'mvn package'
                     }else{
-                        echo currentBuild.result
                         echo 'THERE WERE ISSUES ON THIS BUILD'
                     }
                 }
