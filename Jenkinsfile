@@ -19,8 +19,15 @@ pipeline {
 	    }
     	stage('Unit Test') {
     		steps {
-                sh 'mvn test -ff'
-    			junit '**/target/surefire-reports/TEST-*.xml'
+                script {
+                    try {
+                        sh 'mvn test -ff'
+                    }catch(Exception ex) {
+
+                    }finally {
+                        junit '**/target/surefire-reports/TEST-*.xml'
+                    }
+                }
     		}
     	}
     	stage('SonarQube') {
