@@ -18,7 +18,7 @@ node {
         }catch(Exception e){
             currentBuild.result = 'UNSTABLE'
         }finally{
-            throw e
+            echo e.getMessage()
             //sh 'ls target/surefire-reports/'
             //junit '**/target/surefire-reports/TEST-*.xml'
         }
