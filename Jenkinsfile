@@ -52,7 +52,6 @@ pipeline {
                         echo 'THERE WERE ISSUES ON THIS BUILD'
                     }
                 }
-    			
     		}
     	}
    }
