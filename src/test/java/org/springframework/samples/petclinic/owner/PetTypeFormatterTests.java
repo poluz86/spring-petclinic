@@ -41,7 +41,7 @@ public class PetTypeFormatterTests {
         PetType petType = new PetType();
         petType.setName("Hamster");
         String petTypeName = this.petTypeFormatter.print(petType, Locale.ENGLISH);
-        assertEquals("Hamster1", petTypeName);
+        assertEquals("Hamster", petTypeName);
     }
 
     @Test
