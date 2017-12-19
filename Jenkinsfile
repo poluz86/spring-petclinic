@@ -22,6 +22,7 @@ pipeline {
                     sh 'groovy sample.groovy'
                     echo "mvn clean compile"
                     echo "1"
+                    echo "2"
    				}
 	    	}
 	    }
