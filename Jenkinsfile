@@ -21,8 +21,8 @@ pipeline {
                     hash = sh 'grep "git checkout" ../../jobs/$JOB_NAME/builds/$BUILD_NUMBER/log | head -1 | sed \'s/ git checkout -f //g\' | cut -c 1-10'                
                     sh 'groovy sample.groovy'
                     sh 'mvn clean compile'
-                    println hash
                 }
+                echo "${hash}"
 	    	}
 	    }
     	stage('Unit Test') {
