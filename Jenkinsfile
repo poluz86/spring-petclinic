@@ -17,8 +17,9 @@ pipeline {
 	stages {
 	    stage('Compile') {
 			steps {
+                sh 'grep "git checkout" ../../jobs/$JOB_NAME/builds/$BUILD_NUMBER/log | head -1 | sed \'s/ git checkout -f //g\' | cut -c 1-10 > hash.txt' 
                 script{
-                    hash = sh 'grep "git checkout" ../../jobs/$JOB_NAME/builds/$BUILD_NUMBER/log | head -1 | sed \'s/ git checkout -f //g\' | cut -c 1-10'                
+                    hash = readFile('hash.txt').trim()                 
                     sh 'groovy sample.groovy'
                     sh 'mvn clean compile'
                 }
