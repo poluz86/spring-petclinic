@@ -19,7 +19,8 @@ pipeline {
 			steps {
 	    		timeout(time: 1, unit:'MINUTES'){
                     sh 'pwd'
-                    echo "BUILDNUMBER: $BUILD_NUMBER"                   
+                    echo "BUILDNUMBER: $BUILD_NUMBER"
+                    echo "JOBNAME: $JOB_NAME"                   
                     sh 'groovy sample.groovy'
                     sh 'mvn clean compile'
    				}
