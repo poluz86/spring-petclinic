@@ -21,7 +21,7 @@ pipeline {
                     sh 'pwd'
                     echo "BUILDNUMBER: $BUILD_NUMBER"
                     echo "JOBNAME: $JOB_NAME"
-                    sh 'ls ../../jobs/Commit_Phase/builds/79/'
+                    sh 'cat ../../jobs/Commit_Phase/builds/80/log | head -n 10'
                     //sh "cat ../../jobs/$JOB_NAME/builds/$BUILD_NUMBER/log | head -n 20"                   
                     sh 'groovy sample.groovy'
                     sh 'mvn clean compile'
