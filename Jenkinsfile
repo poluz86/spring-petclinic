@@ -9,6 +9,10 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr:'5'))
     }
 
+    define {
+        def hash
+    }
+
     environment {
         GROOVY_HOME = '/home/paolo/.sdkman/candidates/groovy/current'
         PATH = "$PATH:/home/paolo/.sdkman/candidates/groovy/current/bin"
