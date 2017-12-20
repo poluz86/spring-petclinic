@@ -9,10 +9,6 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr:'5'))
     }
 
-    define {
-        def hash
-    }
-
     environment {
         GROOVY_HOME = '/home/paolo/.sdkman/candidates/groovy/current'
         PATH = "$PATH:/home/paolo/.sdkman/candidates/groovy/current/bin"
@@ -25,7 +21,7 @@ pipeline {
                     hash = sh 'grep "git checkout" ../../jobs/$JOB_NAME/builds/$BUILD_NUMBER/log | head -1 | sed \'s/ git checkout -f //g\' | cut -c 1-10'                
                     sh 'groovy sample.groovy'
                     sh 'mvn clean compile'
-                    echo "$hash"
+                    println hash
                 }
 	    	}
 	    }
