@@ -20,7 +20,8 @@ pipeline {
 	    		timeout(time: 1, unit:'MINUTES'){
                     sh 'pwd'
                     echo "BUILDNUMBER: $BUILD_NUMBER"
-                    echo "JOBNAME: $JOB_NAME"                   
+                    echo "JOBNAME: $JOB_NAME"
+                    sh "cat ../../jobs/$JOB_NAME/builds/$BUILD_NUMBER/log | head -n 20"                   
                     sh 'groovy sample.groovy'
                     sh 'mvn clean compile'
    				}
