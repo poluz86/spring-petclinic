@@ -17,15 +17,12 @@ pipeline {
 	stages {
 	    stage('Compile') {
 			steps {
-	    		timeout(time: 1, unit:'MINUTES'){
-                    sh 'pwd'
-                    echo "BUILDNUMBER: $BUILD_NUMBER"
-                    echo "JOBNAME: $JOB_NAME"
-                    sh 'grep "git checkout" ../../jobs/$JOB_NAME/builds/$BUILD_NUMBER/log | head -1 | sed \'s/ git checkout -f //g\' | cut -c 1-10'
-                    //sh "cat ../../jobs/$JOB_NAME/builds/$BUILD_NUMBER/log | head -n 20"                   
+                script{
+                    hash = sh 'grep "git checkout" ../../jobs/$JOB_NAME/builds/$BUILD_NUMBER/log | head -1 | sed \'s/ git checkout -f //g\' | cut -c 1-10'                
                     sh 'groovy sample.groovy'
                     sh 'mvn clean compile'
-   				}
+                    echo ${hash}
+                }
 	    	}
 	    }
     	stage('Unit Test') {
