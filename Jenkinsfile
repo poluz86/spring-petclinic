@@ -42,7 +42,7 @@ pipeline {
     	stage('SonarQube') {
     		steps {
                 timeout(time:5, unit:'MINUTES') {
-                    sh 'mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=3f385cb0591c2a3712368b4cacadac5f7badb01c'
+                    sh 'mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=3f385cb0591c2a3712368b4cacadac5f7badb01c -X'
                     echo 'http://localhost:9000/dashboard/index/org.springframework.samples:spring-petclinic'
                 }
     		}
