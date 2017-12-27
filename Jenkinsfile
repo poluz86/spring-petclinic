@@ -42,7 +42,8 @@ pipeline {
     	stage('SonarQube') {
     		steps {
                 timeout(time:5, unit:'MINUTES') {
-                    sh 'mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=3f385cb0591c2a3712368b4cacadac5f7badb01c -X'
+                    //sh 'mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=ada1d856bbb16e3f855e86a76069af9aa360f3ed' 
+                    sh 'mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=sistemas2008'
                     echo 'http://localhost:9000/dashboard/index/org.springframework.samples:spring-petclinic'
                 }
     		}
