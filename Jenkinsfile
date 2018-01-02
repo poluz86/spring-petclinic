@@ -27,17 +27,21 @@ pipeline {
 	    }
     	stage('Unit Test') {
     		steps {
-                script {
-                    try {
-                        sh 'mvn test'
-                    }catch(Exception ex) {
-                        //echo "Caught: ${ex}"
-                        currentBuild.result = 'UNSTABLE'
-                    }finally {
-                        junit '**/target/surefire-reports/TEST-*.xml'
-                    }
-                }
+                sh 'mvn test'
     		}
+            post {
+                always {
+                    junit '**/target/surefire-reports/TEST-*.xml'
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'target/site/jacoco-ut',
+                        reportFiles: 'index.html',
+                        reportName: 'Junit Coverage'
+                    ]
+                }
+            }
     	}
     	stage('SonarQube') {
     		steps {
