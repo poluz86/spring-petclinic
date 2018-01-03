@@ -29,7 +29,8 @@
     <thymeleaf.version>3.0.6.RELEASE</thymeleaf.version>
 
     <cobertura.version>2.7</cobertura.version>
-
+    <sonar.jacoco.itReportPath>${project.build.directory}/coverage-reports/jacoco-ut.exec</sonar.jacoco.itReportPath>
+    <sonar.java.binaries>target/classes</sonar.groovy.binaries>
   </properties>
 
   <dependencies>
