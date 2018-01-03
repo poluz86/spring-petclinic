@@ -30,7 +30,7 @@
 
     <cobertura.version>2.7</cobertura.version>
     <sonar.jacoco.itReportPath>${project.build.directory}/coverage-reports/jacoco-ut.exec</sonar.jacoco.itReportPath>
-    <sonar.java.binaries>target/classes</sonar.groovy.binaries>
+    <sonar.java.binaries>target/classes</sonar.java.binaries>
   </properties>
 
   <dependencies>
