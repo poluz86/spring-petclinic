@@ -54,7 +54,6 @@ pipeline {
             }
         }
         stage('Verify Changes'){
-            script{
             parallel{
                 stage('Deploy'){
                     steps{
@@ -71,7 +70,6 @@ pipeline {
                         echo 'Api Test'
                     }
                 }
-            }
             }
 
         }
