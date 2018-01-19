@@ -16,11 +16,11 @@ node {
     
     lock('MyResource'){
         stage('Compile'){
-            echo 'Compile it'
+            sh 'mvn clean compile'
         }
 
         stage('Unit Test'){
-            echo 'Unit test'
+            sh 'mvn test'
         }
     }
 
