@@ -33,7 +33,7 @@ node {
         }
 
         stage('SonarQube'){
-            sh 'mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=8f1d8a52e382119af681b879462d60cb7c54920d -Dsonar.projectKey="sla-"$BRANCH_NAME -Dsonar.projectName="service-layer-api ["$BRANCH_NAME"]"'
+            sh 'mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=8f1d8a52e382119af681b879462d60cb7c54920d -Dsonar.projectKey="sla-"$BRANCH_NAME -Dsonar.projectName="petclinic ["$BRANCH_NAME"]"'
         }
     }
 
