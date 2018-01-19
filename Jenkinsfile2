@@ -1,8 +1,14 @@
 node {
     
-    triggers {
-        pollSCM 'H/5 * * * *'
-    }
+    properties(
+        [
+            [
+                $class: 'BuildDiscarderProperty',
+                strategy: [$class: 'LogRotator', numToKeepStr: '10']
+            ],
+            pipelineTriggers([cron('H/30 * * * *')]),
+        ]
+    )
 
     stage('Checkout'){
         git 'https://github.com/poluz86/spring-petclinic.git'
