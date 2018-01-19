@@ -54,6 +54,7 @@ pipeline {
             }
         }
         stage('Verify Changes'){
+            lock('MyResource'){
             parallel{
                 stage('Deploy'){
                     steps{
@@ -71,9 +72,14 @@ pipeline {
                     }
                 }
             }
+            }
+
         }
 
         stage('Promote') {
+            when {
+                branch 'master' 
+            }
             steps {
                 script {
                     if(currentBuild.result == null){ 
