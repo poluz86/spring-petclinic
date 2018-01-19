@@ -1,8 +1,7 @@
 node {
     
-    options {
-        disableConcurrentBuilds()
-        buildDiscarder(logRotator(numToKeepStr:'5'))
+    triggers {
+        pollSCM 'H/5 * * * *'
     }
 
     stage('Checkout'){
@@ -18,5 +17,5 @@ node {
             echo 'Unit test'
         }
     }
-    
+
 }
