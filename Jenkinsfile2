@@ -3,11 +3,14 @@ node {
     stage('Checkout'){
         git 'https://github.com/poluz86/spring-petclinic.git'
     }
+    
+    lock('MyResource'){
+        stage('Compile'){
+            echo 'Compile it'
+        }
 
-    stage('Compile'){
-        echo 'Compile it'
-    }
-    stage('Unit Test'){
-        echo 'Unit test'
+        stage('Unit Test'){
+            echo 'Unit test'
+        }
     }
 }
