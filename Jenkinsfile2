@@ -21,6 +21,12 @@ node {
 
         stage('Unit Test'){
             sh 'mvn test'
+            junit '**/target/surefire-reports/TEST-*.xml'
+            
+        }
+
+        stage('Sonar Qube'){
+
         }
     }
 
