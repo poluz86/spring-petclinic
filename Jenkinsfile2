@@ -1,0 +1,9 @@
+node {
+    
+    stage('Compile'){
+        echo 'Compile it'
+    }
+    stage('Unit Test'){
+        echo 'Unit test'
+    }
+}
