@@ -15,7 +15,7 @@ pipeline {
     }
 
 	stages {
-        lock {
+        lock('MyResource') {
             stage('Compile') {
                 steps {
                     sh 'grep "git checkout" ../../jobs/$JOB_NAME/builds/$BUILD_NUMBER/log | head -1 | sed \'s/ git checkout -f //g\' | cut -c 3-10 > hash.txt' 
