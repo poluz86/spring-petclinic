@@ -7,7 +7,7 @@ node {
                 strategy: [$class: 'LogRotator', numToKeepStr: '10']
             ],
             pipelineTriggers([cron(cron_string)]),
-            pipelineTriggers([pollSCM 'H/5 * * * *']),
+            pipelineTriggers([pollSCM('H/5 * * * *')]),
         ]
     )
 
