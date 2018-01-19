@@ -1,12 +1,13 @@
 node {
-    String cron_string = BRANCH_NAME == "master" ? "@hourly" : ""    
+    String cron_string = BRANCH_NAME == "master" ? "@midnight" : ""    
     properties(
         [
             [
                 $class: 'BuildDiscarderProperty',
                 strategy: [$class: 'LogRotator', numToKeepStr: '10']
             ],
-            pipelineTriggers([cron('H/30 * * * *')]),
+            pipelineTriggers([cron(cron_string)]),
+            pipelineTriggers([pollSCM 'H/5 * * * *']),
         ]
     )
 
