@@ -54,7 +54,7 @@ pipeline {
             }
         }
         stage('Verify Changes'){
-            lock('MyResource'){
+            script{
             parallel{
                 stage('Deploy'){
                     steps{
