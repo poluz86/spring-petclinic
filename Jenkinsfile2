@@ -1,5 +1,5 @@
 node {
-    
+    String cron_string = BRANCH_NAME == "master" ? "@hourly" : ""    
     properties(
         [
             [
@@ -11,6 +11,7 @@ node {
     )
 
     stage('Checkout'){
+        echo cron_string
         git 'https://github.com/poluz86/spring-petclinic.git'
     }
     
