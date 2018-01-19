@@ -1,5 +1,9 @@
 node {
     
+    stage('Checkout'){
+        git 'https://github.com/poluz86/spring-petclinic.git'
+    }
+
     stage('Compile'){
         echo 'Compile it'
     }
