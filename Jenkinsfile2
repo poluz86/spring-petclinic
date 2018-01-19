@@ -1,5 +1,10 @@
 node {
     
+    options {
+        disableConcurrentBuilds()
+        buildDiscarder(logRotator(numToKeepStr:'5'))
+    }
+
     stage('Checkout'){
         git 'https://github.com/poluz86/spring-petclinic.git'
     }
@@ -13,4 +18,5 @@ node {
             echo 'Unit test'
         }
     }
+    
 }
