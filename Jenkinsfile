@@ -53,25 +53,21 @@ pipeline {
                 }
             }
         }
-        stage('Verify Changes'){
-            parallel{
-                stage('Deploy'){
-                    steps{
-                        echo 'DEPLOYING'
-                    }
-                }
-                stage('Smoke Test'){
-                    steps{
-                        echo 'Smoke Test!'
-                    }
-                }
-                stage('Api Test'){
-                    steps {
-                        echo 'Api Test'
-                    }
-                }
-            }
 
+        stage('Deploy'){
+            steps{
+                echo 'DEPLOYING'
+            }
+        }
+        stage('Smoke Test'){
+            steps{
+                echo 'Smoke Test!'
+            }
+        }
+        stage('Api Test'){
+            steps {
+                echo 'Api Test'
+            }
         }
 
         stage('Promote') {
