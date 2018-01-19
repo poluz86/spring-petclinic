@@ -22,7 +22,14 @@ node {
         stage('Unit Test'){
             sh 'mvn test'
             junit '**/target/surefire-reports/TEST-*.xml'
-            
+            publishHTML target: [
+                allowMissing: false,
+                alwaysLinkToLastBuild: false,
+                keepAll: true,
+                reportDir: 'target/site/jacoco-ut',
+                reportFiles: 'index.html',
+                reportName: 'Junit Coverage'
+            ]
         }
 
         stage('Sonar Qube'){
