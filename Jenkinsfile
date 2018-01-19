@@ -54,7 +54,7 @@ pipeline {
             }
         }
         stage('Verify Changes'){
-            parallel 'Deploy': {
+            parallel{
                 stage('Deploy'){
                     steps{
                         echo 'DEPLOYING'
