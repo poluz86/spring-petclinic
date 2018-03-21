@@ -216,6 +216,7 @@ node {
 
         stage('CleanUp Environment') {
             echo 'b'
+        }
     }
 
     stage('Promote') {
