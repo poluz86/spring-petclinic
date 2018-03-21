@@ -149,12 +149,9 @@ def stopContainers(service, config, db) {
 }
 
 node {
-    String cron_string = BRANCH_NAME == "master" ? "@midnight" : ""
     def containerStarted = 0
-    def channel = BRANCH_NAME == "CDelivery" ? "#test-notification" : "#service-api-pipelines"
     def mention = "<@U8A83ELPP>"
     def commitMessages = ""
-    def slackTitle = BRANCH_NAME == "master" ? "Master Pipeline" : "Feature Pipeline"
     def lockDeploy = 'deploy'
     def lockUnitTest = 'unit'
 
@@ -166,7 +163,6 @@ node {
             ],
             pipelineTriggers(
                 [
-                    cron(cron_string),
                     pollSCM('H/2 * * * *')
                 ]
             )
@@ -174,7 +170,7 @@ node {
     )    
 
     stage('Checkout') {
-        git poll: true, branch: BRANCH_NAME, url: 'https://github.com/poluz86/spring-petclinic.git'
+        git poll: true, url: 'https://github.com/poluz86/spring-petclinic.git'
 
         echo 'df'
     }
