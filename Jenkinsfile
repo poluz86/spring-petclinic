@@ -1,90 +1,224 @@
-pipeline {
-	agent any
+def containerDB = "serviceapidb"
+def containerConfig = "config"
+def containerService = "api"
 
-    triggers {
-        pollSCM 'H/5 * * * *'
-    }
-
-    options {
-        disableConcurrentBuilds()
-        buildDiscarder(logRotator(numToKeepStr:'5'))
-    }
-
-    environment {
-        GROOVY_HOME = '/home/paolo/.sdkman/candidates/groovy/current'
-        PATH = "$PATH:/home/paolo/.sdkman/candidates/groovy/current/bin"
-    }
-
-	stages {
-        stage('Compile') {
-            steps {
-                sh 'grep "git checkout" ../../jobs/$JOB_NAME/builds/$BUILD_NUMBER/log | head -1 | sed \'s/ git checkout -f //g\' | cut -c 3-10 > hash.txt' 
-                script{
-                    hash = readFile('hash.txt').trim()                 
-                    sh 'mvn clean compile'
-                }
-                echo "${hash}"
-            }
+@NonCPS
+def verifyOwasp(path) {
+    def xml = new XmlSlurper().parse(path)
+    xml.site.alerts.each {
+        if(it.alertitem.riskdesc.text().contains('High')) {
+            return 1
         }
+    }
+
+    return 0
+}
+
+@NonCPS
+def verifyApiTest(path) {
+    def apiXML = new XmlSlurper().parse(path)
+    def total = 0
+    def failed = 0
+    def allowed = 0.1
+    apiXML.testsuite.testcase.each {
+        total++
+        if(it.text().contains('Failed')) {
+            failed++
+        }
+    }
+
+    def result = ((failed*100)/total)/100
+    println '-------total-------'
+    println total
+
+    println '-------failed------'
+    println failed
+    
+    if(result > allowed) {
+        return 1
+    } else {
+        return 0
+    }
+}
+
+@NonCPS
+def verifySmokeTest(path) {
+    def smokeXML = new XmlSlurper().parse(path)
+    def flag = 0 
+    smokeXML.testsuite.testcase.each {
+        if(it.text().contains('Failed')) {
+            flag = 1
+        }
+    }
+
+    if(flag == 1) {
+        return 1
+    }
+
+    return 0
+}
+
+@NonCPS
+def getCommitMessages() {
+    def commitMessages = ""
+    currentBuild.changeSets.each {
+        set -> set.each {
+            entry ->    def commitID = "${entry.commitId}".substring(0, 8)
+                        commitMessages += "  ${commitID} by ${entry.author}: ${entry.msg} \n"
+        }
+    }
+
+    if(commitMessages.length() > 0) {
+        commitMessages = "Commits involved: \n" + commitMessages 
+    }
+
+    return commitMessages
+}
+
+@NonCPS
+def getSlackMentions() {
+    def authors = []
+    def mentions = ""
+    def translator = [:]
+
+    translator['Vincent Hwang'] = "<@U70K4PMS4>"
+    translator['Luong Dinh'] = "<@U5BFZDGQ3>"
+    translator['Shalini Rekulapally'] = "<@U8H3Y4GUD>"
+    translator['jesusalayoavila'] = "<@U2TG6D2GL>"
+    translator['max.macalupu'] = "<@U8W6RLKG8>"
+    translator['Ricardo Jauregui'] = "<@U6WJRS7B3>"
+    translator['paolo.quintero'] = "<@U8A83ELPP>"
+    translator['Paolo Quintero'] = "<@U8A83ELPP>"
+    translator['Jim Hickey'] = "<@U56PLBQF4>"
+
+    currentBuild.changeSets.each {
+        set -> set.each {
+            entry -> authors << "${entry.author.fullName}"
+        }
+    }
+
+    authors = authors.unique()
+    if(authors.size() == 0){
+        return "<@U8A83ELPP>"
+    }
+
+    for(a in authors) {
+        mentions += translator["$a"] + " "
+    }
+
+    return mentions.trim()
+}
+
+def stopContainers(option, service, config, db) {
+    node('docker.hq.builder') {
+        if(option == 1) {
+            sh "docker stop ${db}" 
+            sh "docker rm ${db}" 
+            sh 'docker network rm serviceapi-network'
+        }
+        if(option == 2) {
+            sh "docker stop ${db}" 
+            sh "docker rm ${db}" 
+            sh "docker stop ${config}" 
+            sh "docker rm ${config}" 
+            sh 'docker network rm serviceapi-network'
+        }
+        if(option == 3) {
+            sh "docker stop ${db}" 
+            sh "docker rm ${db}" 
+            sh "docker stop ${config}" 
+            sh "docker rm ${config}" 
+            sh "docker stop ${service}" 
+            sh "docker rm ${service}" 
+            sh 'docker network rm serviceapi-network'
+        }
+
+    }
+}
+
+def stopContainers(service, config, db) {
+    node('docker.hq.builder') {
+        sh "docker stop ${service}"
+        sh "docker stop ${config}"
+        sh "docker stop ${db}"
+        sh "docker rm ${service}"
+        sh "docker rm ${config}"
+        sh "docker rm ${db}"
+        sh 'docker network rm serviceapi-network'
+    }
+}
+
+node {
+    String cron_string = BRANCH_NAME == "master" ? "@midnight" : ""
+    def containerStarted = 0
+    def channel = BRANCH_NAME == "CDelivery" ? "#test-notification" : "#service-api-pipelines"
+    def mention = "<@U8A83ELPP>"
+    def commitMessages = ""
+    def slackTitle = BRANCH_NAME == "master" ? "Master Pipeline" : "Feature Pipeline"
+    def lockDeploy = 'deploy'
+    def lockUnitTest = 'unit'
+
+    properties(
+        [
+            [
+                $class: 'BuildDiscarderProperty',
+                strategy: [$class: 'LogRotator', numToKeepStr: '10']
+            ],
+            pipelineTriggers(
+                [
+                    cron(cron_string),
+                    pollSCM('H/2 * * * *')
+                ]
+            )
+        ]
+    )    
+
+    stage('Checkout') {
+        git poll: true, branch: BRANCH_NAME, url: 'https://github.com/poluz86/spring-petclinic.git'
+
+        echo 'df'
+    }
+
+    stage('Compile') {
+        echo 'dsf'
+    }
+
+   lock("${lockUnitTest}") {
         stage('Unit Test') {
-            steps {
-                sh 'mvn test'
-            }
-            post {
-                always {
-                    junit '**/target/surefire-reports/TEST-*.xml'
-                    publishHTML target: [
-                        allowMissing: false,
-                        alwaysLinkToLastBuild: false,
-                        keepAll: true,
-                        reportDir: 'target/site/jacoco-ut',
-                        reportFiles: 'index.html',
-                        reportName: 'Junit Coverage'
-                    ]
-                }
-            }
-        }
-        stage('SonarQube') {
-            steps {
-                timeout(time:5, unit:'MINUTES') {
-                    sh 'mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=8f1d8a52e382119af681b879462d60cb7c54920d'
-                    //sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.4.0.905:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=82166ae8f4327f442a649669db82071a767d18fa'
-                    echo 'http://localhost:9000/dashboard/index/org.springframework.samples:spring-petclinic'
-                }
-            }
-        }
-
-        stage('Deploy'){
-            steps{
-                echo 'DEPLOYING'
-            }
-        }
-        stage('Smoke Test'){
-            steps{
-                echo 'Smoke Test!'
-            }
-        }
-        stage('Api Test'){
-            steps {
-                echo 'Api Test'
-            }
-        }
-
-        stage('Promote') {
-            when {
-                branch 'master' 
-            }
-            steps {
-                script {
-                    if(currentBuild.result == null){ 
-                        echo "${hash}"
-                        sh 'mvn package'
-                        archiveArtifacts artifacts: 'target/*.jar'
-                    }else{
-                        echo 'THERE WERE ISSUES ON THIS BUILD'
-                    }
-                }
-            }
+            echo 'unit'
         }
    }
+
+    stage('Code Analysis') {
+        echo 'a'
+    }
+
+    stage('Packaging') {
+        echo 'a'
+    }
+
+    lock("${lockDeploy}") {
+        stage('Testing Deploy') {
+            echo 'ss'
+        }
+
+        stage('Smoke Test') {
+            echo 's'
+        }
+
+        stage('Api Test') {
+            echo 'd'
+        }
+
+        stage('Performance Test') {
+            echo 'c'
+        }
+
+        stage('CleanUp Environment') {
+            echo 'b'
+    }
+
+    stage('Promote') {
+        echo 'a'
+    }
 }
